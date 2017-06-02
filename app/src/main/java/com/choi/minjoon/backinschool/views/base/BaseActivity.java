@@ -1,10 +1,8 @@
 package com.choi.minjoon.backinschool.views.base;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,34 +13,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.choi.minjoon.backinschool.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import com.choi.minjoon.backinschool.views.home.HomeActivity;
 
 public class BaseActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
 
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
 
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
 
-    ActionBarDrawerToggle toggle;
-
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
-        ButterKnife.bind(this);
         if (savedInstanceState == null) {
+
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
@@ -50,24 +36,24 @@ public class BaseActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
 //            actionBar.setHomeAsUpIndicator(R.drawable.button_back); //뒤로가기 버튼을 본인이 만든 아이콘으로 하기 위해 필요
 
-            toggle = new ActionBarDrawerToggle(
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.setDrawerListener(toggle);
             toggle.syncState();
 
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
         }
     }
 
 
-    @OnClick(R.id.fab)
-    public void onFabClick(View view){
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show();
-    }
 
     @Override
     public void onBackPressed() {
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -97,6 +83,7 @@ public class BaseActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -105,8 +92,16 @@ public class BaseActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            if(!(this instanceof HomeActivity)){
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
 
+        } else if (id == R.id.nav_gallery) {
+//            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+//            startActivity(intent);
+//            finish();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -117,6 +112,7 @@ public class BaseActivity extends AppCompatActivity
 
         }
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

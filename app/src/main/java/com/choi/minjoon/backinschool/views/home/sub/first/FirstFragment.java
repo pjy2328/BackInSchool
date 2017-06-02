@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -112,7 +113,7 @@ public class FirstFragment extends Fragment {
 
 
     @OnClick(R.id.reloadBtn)
-    public void firstFragBtnClicked(View view) {
+    public void reloadBtnClicked(View view) {
 
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -122,6 +123,22 @@ public class FirstFragment extends Fragment {
         new FirstListRefresh().execute(call);
 
         Snackbar.make(view, "Reloaded", Snackbar.LENGTH_SHORT).show();
+
+    }
+
+    @OnClick(R.id.listLayoutBtn)
+    public void listLayoutBtnClicked(View view) {
+
+        manager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(manager);
+
+    }
+
+    @OnClick(R.id.gridLayoutBtn)
+    public void gridLayoutBtnClicked(View view) {
+
+        manager = new GridLayoutManager(getActivity(), 2);
+        recyclerView.setLayoutManager(manager);
 
     }
 
@@ -138,13 +155,9 @@ public class FirstFragment extends Fragment {
                 Call<List<FirstItem>> call = params[0];
                 HomeData.FirstList = call.execute().body();
                 firstAdapter.replace(HomeData.FirstList);
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                Thread.sleep(300);
                 return HomeData.FirstList;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;

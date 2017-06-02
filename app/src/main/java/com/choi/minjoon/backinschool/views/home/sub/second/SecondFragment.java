@@ -112,7 +112,7 @@ public class SecondFragment extends Fragment {
 
 
     @OnClick(R.id.reloadBtn)
-    public void firstFragBtnClicked(View view) {
+    public void reloadBtnClicked(View view) {
 
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
